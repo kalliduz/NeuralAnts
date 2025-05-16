@@ -6,7 +6,13 @@ class Environment {
     }
 
     update() {
-        // environment dynamics placeholder
+        // spawn new food occasionally
+        if (this.food.length < 50 && Math.random() < 0.02) {
+            this.food.push({
+                x: Math.random() * this.width,
+                y: Math.random() * this.height
+            });
+        }
     }
 
     draw(ctx) {

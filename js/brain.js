@@ -4,7 +4,9 @@ class Brain {
     }
 
     process(inputs) {
-        // return random outputs for now
-        return inputs.map(() => Math.random() * 2 - 1);
+        const [dx, dy, dist] = inputs;
+        // move towards sensed direction with speed based on distance
+        const speed = dist;
+        return [dx, dy, speed];
     }
 }

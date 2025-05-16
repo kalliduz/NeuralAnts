@@ -16,6 +16,10 @@ class Ant {
         this.actors.apply(outputs);
         this.x += this.vx;
         this.y += this.vy;
+        // check for food consumption
+        this.environment.food = this.environment.food.filter(f => {
+            return Math.hypot(f.x - this.x, f.y - this.y) > 5;
+        });
     }
 
     draw(ctx) {

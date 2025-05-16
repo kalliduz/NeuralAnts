@@ -8,11 +8,13 @@ runs without any build step; simply open `main.html` in a browser.
 ## Components
 
 - **Environment**: Holds global state such as food locations and terrain
-  information. It exposes update and draw methods.
+  information. It spawns food items over time and exposes update and draw
+  methods.
 - **Ant**: Represents an individual ant with a position, sensors and actors.
-- **Brain**: Placeholder for a small neural network. The initial stub provides
-  random outputs.
-- **Sensors**: Collect information from the environment for an ant.
+- **Brain**: Processes sensor data and returns movement commands. The current
+  implementation simply moves the ant toward sensed food.
+- **Sensors**: Collect information from the environment for an ant. They
+  currently return the direction and distance to the nearest food source.
 - **Actors**: Modify the ant or environment based on brain outputs.
 - **Simulation**: Manages the environment and the set of ants. Responsible for
   updating and rendering everything each frame.

@@ -7,7 +7,8 @@ version is a stub meant as a starting point for further development.
 ## Usage
 
 Open `main.html` in any modern browser. The page will display a canvas with a
-single ant moving randomly. No server or build step is required.
+single ant seeking out food that appears over time. No server or build step is
+required.
 
 ## Repository Structure
 
