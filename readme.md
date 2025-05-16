@@ -1,20 +1,21 @@
 # Neural Ants
 
-A simple ant colony simulation that runs directly in the browser. The goal is
-for ants to evolve behaviours through a small neural network. The current
-version is a stub meant as a starting point for further development.
+A simple ant colony simulation that runs directly in the browser. Ants evolve
+behaviours through small neural networks that mutate when food is plentiful.
 
 ## Usage
 
 Open `main.html` in any modern browser. The page will display a canvas with a
-single ant seeking out food that appears over time. No server or build step is
-required.
+population of ants seeking out food that appears over time. A second canvas
+shows a visualisation of the neural network used by the first ant. No server
+or build step is required.
 
 ## Repository Structure
 
 - `main.html` – entry point that loads all scripts
 - `css/` – style sheets
 - `js/` – JavaScript source files
+- `js/network_viz.js` – draws a small visualisation of the first ant's brain
 - `docs/` – project documentation
 
 See `docs/architecture.md` for a high level overview.
