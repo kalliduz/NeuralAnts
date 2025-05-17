@@ -6,9 +6,10 @@ behaviours through small neural networks that mutate when food is plentiful.
 ## Usage
 
 Open `main.html` in any modern browser. The page will display a canvas with a
-population of ants seeking out food that appears over time. A second canvas
-shows a visualisation of the neural network used by the first ant. No server
-or build step is required.
+population of ants seeking out food that appears over time. Before starting you
+can set how many ants to spawn using the input at the top of the page. A second
+canvas shows a visualisation of the neural network used by the first ant. No
+server or build step is required.
 
 ## Repository Structure
 

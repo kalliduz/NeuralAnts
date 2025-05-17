@@ -17,8 +17,9 @@ runs without any build step; simply open `main.html` in a browser.
   currently return the direction and distance to the nearest food source.
 - **Actors**: Modify the ant or environment based on brain outputs (velocity
   updates).
-- **Simulation**: Manages the environment and the set of ants. Responsible for
-  updating and rendering everything each frame.
+- **Simulation**: Manages the environment and the set of ants. It accepts a
+  starting ant count so multiple ants can compete from the beginning of the
+  simulation. Responsible for updating and rendering everything each frame.
 - **NetworkViz**: Renders the neural network of the first ant onto a small
   canvas so that weights and topology can be observed.
 
