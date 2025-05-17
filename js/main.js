@@ -13,6 +13,8 @@ class Simulation {
         this.reproCost = config.reproductionEnergyCost || 40;
         this.mutationRate = config.mutationRate || 0.2;
         this.networkViz = new NetworkViz('networkCanvas');
+        this.statsEl = document.getElementById('stats');
+        this.stepCount = 0;
     }
 
     update() {
@@ -34,6 +36,8 @@ class Simulation {
             }
         });
         this.ants.push(...newAnts);
+        this.stepCount++;
+        this._updateStats();
     }
 
     draw() {
@@ -42,6 +46,15 @@ class Simulation {
         if (this.ants[0]) {
             this.networkViz.draw(this.ants[0].brain);
         }
+    }
+
+    _updateStats() {
+        if (!this.statsEl) return;
+        const avgEnergy = this.ants.reduce((sum, a) => sum + a.energy, 0) /
+            (this.ants.length || 1);
+        this.statsEl.textContent =
+            `Ants: ${this.ants.length} | Food: ${this.environment.food.length}` +
+            ` | Step: ${this.stepCount} | Avg energy: ${avgEnergy.toFixed(1)}`;
     }
 
     step() {

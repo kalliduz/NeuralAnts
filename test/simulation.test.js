@@ -12,7 +12,10 @@ const Simulation = require('../js/main.js');
 
 // minimal DOM stubs
 global.document = {
-  getElementById: () => ({ getContext: () => ({}) })
+  getElementById: (id) => {
+    if (id === 'stats') return { textContent: '' };
+    return { getContext: () => ({}) };
+  }
 };
 
 test('Simulation reproduces when energy threshold exceeded', () => {
