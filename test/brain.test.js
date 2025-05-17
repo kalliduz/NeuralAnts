@@ -24,3 +24,12 @@ test('Brain process outputs a unit direction', () => {
   const mag = Math.hypot(dx, dy);
   assert.ok(Math.abs(mag - 1) < 1e-6);
 });
+
+test('Brain stores activations from last process call', () => {
+  const brain = new Brain(3, 2, 2);
+  const inp = [0.1, 0.2, 0.3];
+  brain.process(inp);
+  assert.deepStrictEqual(brain.lastInput, inp);
+  assert.strictEqual(brain.lastHidden.length, brain.hiddenSize);
+  assert.strictEqual(brain.lastOutput.length, 3);
+});

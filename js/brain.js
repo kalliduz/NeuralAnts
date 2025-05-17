@@ -27,9 +27,11 @@ class Brain {
     }
 
     process(inputs) {
+        this.lastInput = inputs.slice();
         const hidden = this.weights1.map(row =>
             sigmoid(row.reduce((sum, w, i) => sum + w * inputs[i], 0))
         );
+        this.lastHidden = hidden.slice();
         const raw = this.weights2.map(row =>
             row.reduce((sum, w, i) => sum + w * hidden[i], 0)
         );
@@ -37,7 +39,8 @@ class Brain {
         const dirX = raw[0] / mag;
         const dirY = raw[1] / mag;
         const speed = inputs[2];
-        return [dirX, dirY, speed];
+        this.lastOutput = [dirX, dirY, speed];
+        return this.lastOutput;
     }
 }
 

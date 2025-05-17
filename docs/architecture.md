@@ -22,7 +22,9 @@ runs without any build step; simply open `main.html` in a browser.
   from the beginning of the simulation. Responsible for updating and rendering
   everything each frame.
 - **NetworkViz**: Renders the neural network of the first ant onto a small
-  canvas so that weights and topology can be observed.
+  canvas so that weights, topology and current neuron activations can be
+  observed. Node labels describe the meaning of each input and output
+  signal.
 
 Each component is implemented as a plain JavaScript class in the `js/`
 folder. The classes are intentionally lightweight so that the demo loads
