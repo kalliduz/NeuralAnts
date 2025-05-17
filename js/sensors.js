@@ -6,25 +6,45 @@ class Sensors {
 
     read() {
         const food = this.environment.food;
-        if (food.length === 0) {
-            return [0, 0, 0];
+        let dirX = 0, dirY = 0, distNorm = 0;
+        if (food.length > 0) {
+            // find nearest food
+            let nearest = food[0];
+            let minDist = Infinity;
+            for (const f of food) {
+                const dx = f.x - this.ant.x;
+                const dy = f.y - this.ant.y;
+                const d = Math.hypot(dx, dy);
+                if (d < minDist) {
+                    minDist = d;
+                    nearest = f;
+                }
+            }
+            dirX = (nearest.x - this.ant.x) / (minDist || 1);
+            dirY = (nearest.y - this.ant.y) / (minDist || 1);
+            distNorm = Math.min(minDist / 100, 1);
         }
-        // find nearest food
-        let nearest = food[0];
-        let minDist = Infinity;
-        for (const f of food) {
-            const dx = f.x - this.ant.x;
-            const dy = f.y - this.ant.y;
-            const d = Math.hypot(dx, dy);
-            if (d < minDist) {
-                minDist = d;
-                nearest = f;
+
+        // strongest pheromone direction
+        let maxVal = 0;
+        let pDirX = 0, pDirY = 0;
+        for (let x = 0; x < this.environment.mapWidth; x++) {
+            for (let y = 0; y < this.environment.mapHeight; y++) {
+                const val = this.environment.pheromoneMap[x][y];
+                if (val > maxVal) {
+                    maxVal = val;
+                    const cx = x * this.environment.cellSize + this.environment.cellSize / 2;
+                    const cy = y * this.environment.cellSize + this.environment.cellSize / 2;
+                    const dx = cx - this.ant.x;
+                    const dy = cy - this.ant.y;
+                    const d = Math.hypot(dx, dy) || 1;
+                    pDirX = dx / d;
+                    pDirY = dy / d;
+                }
             }
         }
-        const dirX = (nearest.x - this.ant.x) / (minDist || 1);
-        const dirY = (nearest.y - this.ant.y) / (minDist || 1);
-        const distNorm = Math.min(minDist / 100, 1);
-        return [dirX, dirY, distNorm];
+
+        return [dirX, dirY, distNorm, pDirX, pDirY, maxVal];
     }
 }
 

@@ -1,5 +1,5 @@
 class Brain {
-    constructor(inputSize = 3, hiddenSize = 4, outputSize = 2) {
+    constructor(inputSize = 6, hiddenSize = 4, outputSize = 3) {
         this.inputSize = inputSize;
         this.hiddenSize = hiddenSize;
         this.outputSize = outputSize;
@@ -39,7 +39,8 @@ class Brain {
         const dirX = raw[0] / mag;
         const dirY = raw[1] / mag;
         const speed = inputs[2];
-        this.lastOutput = [dirX, dirY, speed];
+        const deposit = sigmoid(raw[2]);
+        this.lastOutput = [dirX, dirY, speed, deposit];
         return this.lastOutput;
     }
 }

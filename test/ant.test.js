@@ -8,7 +8,7 @@ global.Actors = Actors;
 const Environment = require('../js/environment.js');
 const Ant = require('../js/ant.js');
 
-class DummySensors extends Sensors { read() { return [1,0,1]; } }
+class DummySensors extends Sensors { read() { return [1,0,1,0,0,0]; } }
 class DummyActors extends Actors { apply() {} }
 
 test('Ant stops updating when out of energy', () => {

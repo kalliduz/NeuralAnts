@@ -83,7 +83,8 @@ window.addEventListener('load', () => {
             reproductionEnergyCost: parseInt(document.getElementById('reproCostInput').value, 10) || 40,
             energyDecayRate: parseFloat(document.getElementById('energyDecayInput').value) || 0.1,
             foodEnergyGain: parseInt(document.getElementById('foodEnergyInput').value, 10) || 20,
-            pheromoneLife: parseInt(document.getElementById('pheromoneLifeInput').value, 10) || 100,
+            pheromoneDecayRate: parseFloat(document.getElementById('pheromoneDecayInput').value) || 0.01,
+            pheromoneCellSize: parseInt(document.getElementById('pheromoneCellSizeInput').value, 10) || 20,
             obstacleCount: parseInt(document.getElementById('obstacleCountInput').value, 10) || 5,
             width: parseInt(document.getElementById('widthInput').value, 10) || 800,
             height: parseInt(document.getElementById('heightInput').value, 10) || 600

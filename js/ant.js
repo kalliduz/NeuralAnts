@@ -12,7 +12,7 @@ class Ant {
         this.energy = this.initialEnergy;
         this.energyDecayRate = config.energyDecayRate || 0.1;
         this.foodEnergyGain = config.foodEnergyGain || 20;
-        this.pheromoneLife = config.pheromoneLife || 100;
+        this.pheromoneLife = config.pheromoneLife || 100; // unused with map but kept for compatibility
         this.age = 0;
     }
 
@@ -44,9 +44,6 @@ class Ant {
             return !eat;
         });
         if (ate) this.energy = Math.min(this.initialEnergy, this.energy + this.foodEnergyGain);
-
-        // leave pheromone
-        this.environment.pheromones.push({ x: this.x, y: this.y, life: this.pheromoneLife });
     }
 
     draw(ctx) {

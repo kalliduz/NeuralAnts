@@ -17,8 +17,8 @@ class NetworkViz {
         const hiddenActs = brain.lastHidden || Array(brain.hiddenSize).fill(0);
         const outputActs = brain.lastOutput || Array(brain.outputSize).fill(0);
 
-        const inputLabels = ['dirX', 'dirY', 'dist'];
-        const outputLabels = ['moveX', 'moveY', 'speed'];
+        const inputLabels = ['foodX', 'foodY', 'foodDist', 'pherX', 'pherY', 'pher'];
+        const outputLabels = ['moveX', 'moveY', 'drop'];
 
         // connections input->hidden
         ctx.strokeStyle = '#999';

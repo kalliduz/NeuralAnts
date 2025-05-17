@@ -6,8 +6,14 @@ class Environment {
         this.initialFood = config.initialFood || 10;
         this.foodSpawnChance = config.foodSpawnChance || 0.02;
         this.obstacleCount = config.obstacleCount || 5;
+        this.pheromoneDecayRate = config.pheromoneDecayRate || 0.01;
+        this.cellSize = config.pheromoneCellSize || 20;
+        this.mapWidth = Math.ceil(this.width / this.cellSize);
+        this.mapHeight = Math.ceil(this.height / this.cellSize);
         this.food = [];
-        this.pheromones = [];
+        this.pheromoneMap = Array.from({ length: this.mapWidth }, () =>
+            Array.from({ length: this.mapHeight }, () => 0)
+        );
         this.obstacles = [];
         for (let i = 0; i < this.obstacleCount; i++) {
             this.obstacles.push({
@@ -33,6 +39,13 @@ class Environment {
                 y: Math.random() * this.height
             });
         }
+
+        // decay pheromone map
+        for (let x = 0; x < this.mapWidth; x++) {
+            for (let y = 0; y < this.mapHeight; y++) {
+                this.pheromoneMap[x][y] = Math.max(0, this.pheromoneMap[x][y] - this.pheromoneDecayRate);
+            }
+        }
     }
 
     draw(ctx) {
@@ -43,17 +56,16 @@ class Environment {
         ctx.fillStyle = '#888';
         this.obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
 
-        // pheromones
-        this.pheromones.forEach(p => {
-            p.life -= 1;
-        });
-        this.pheromones = this.pheromones.filter(p => p.life > 0);
-        ctx.fillStyle = 'rgba(255,0,0,0.3)';
-        this.pheromones.forEach(p => {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-            ctx.fill();
-        });
+        // pheromone map
+        for (let x = 0; x < this.mapWidth; x++) {
+            for (let y = 0; y < this.mapHeight; y++) {
+                const val = this.pheromoneMap[x][y];
+                if (val > 0) {
+                    ctx.fillStyle = `rgba(255,0,0,${val})`;
+                    ctx.fillRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize);
+                }
+            }
+        }
 
         ctx.fillStyle = 'green';
         this.food.forEach(f => {
@@ -61,6 +73,14 @@ class Environment {
             ctx.arc(f.x, f.y, 3, 0, Math.PI * 2);
             ctx.fill();
         });
+    }
+
+    deposit(x, y, strength = 1) {
+        const cx = Math.floor(x / this.cellSize);
+        const cy = Math.floor(y / this.cellSize);
+        if (cx >= 0 && cx < this.mapWidth && cy >= 0 && cy < this.mapHeight) {
+            this.pheromoneMap[cx][cy] = Math.min(1, this.pheromoneMap[cx][cy] + strength);
+        }
     }
 }
 
