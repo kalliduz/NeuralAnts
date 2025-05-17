@@ -13,6 +13,13 @@ class NetworkViz {
         const hiddenY = this._nodePositions(brain.hiddenSize, this.canvas.height);
         const outputY = this._nodePositions(brain.outputSize, this.canvas.height);
 
+        const inputActs = brain.lastInput || Array(brain.inputSize).fill(0);
+        const hiddenActs = brain.lastHidden || Array(brain.hiddenSize).fill(0);
+        const outputActs = brain.lastOutput || Array(brain.outputSize).fill(0);
+
+        const inputLabels = ['dirX', 'dirY', 'dist'];
+        const outputLabels = ['moveX', 'moveY', 'speed'];
+
         // connections input->hidden
         ctx.strokeStyle = '#999';
         for (let i = 0; i < brain.hiddenSize; i++) {
@@ -28,9 +35,23 @@ class NetworkViz {
         }
         // nodes
         ctx.fillStyle = '#222';
-        inputY.forEach(y => this._circle(layerX[0], y, radius));
-        hiddenY.forEach(y => this._circle(layerX[1], y, radius));
-        outputY.forEach(y => this._circle(layerX[2], y, radius));
+        ctx.textAlign = 'center';
+        ctx.font = '10px Arial';
+        inputY.forEach((y, i) => {
+            this._circle(layerX[0], y, radius);
+            ctx.fillText(inputActs[i].toFixed(2), layerX[0], y - 8);
+            ctx.fillText(inputLabels[i] || `I${i}`, layerX[0], y + 12);
+        });
+        hiddenY.forEach((y, i) => {
+            this._circle(layerX[1], y, radius);
+            ctx.fillText(hiddenActs[i].toFixed(2), layerX[1], y - 8);
+            ctx.fillText(`H${i + 1}`, layerX[1], y + 12);
+        });
+        outputY.forEach((y, i) => {
+            this._circle(layerX[2], y, radius);
+            ctx.fillText(outputActs[i].toFixed(2), layerX[2], y - 8);
+            ctx.fillText(outputLabels[i] || `O${i + 1}`, layerX[2], y + 12);
+        });
     }
 
     _nodePositions(count, height) {
