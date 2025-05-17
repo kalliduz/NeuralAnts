@@ -12,7 +12,9 @@ fields at the top of the page. One of these options, **Initial food**, controls
 how many food items are placed in the environment when the simulation begins.
 A second canvas shows a visualisation of the neural network used by the first
 ant. Neuron activations and labels are displayed so you can see how inputs
-translate to outputs. No server or build step is required.
+translate to outputs. A small stats line under the start button shows how many
+ants are alive, how much food exists and the average energy as the simulation
+runs. No server or build step is required.
 
 ## Repository Structure
 

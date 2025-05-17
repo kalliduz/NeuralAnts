@@ -50,6 +50,9 @@ added to this configuration so they remain user controllable.
   ants must navigate around.
 - **Evolution**: When an ant has high energy it creates a mutated offspring,
   giving rise to a simple genetic algorithm.
+- **Stats panel**: A small element below the start button shows the number of
+  ants, food items and average energy each frame so the simulation's progress
+  can be monitored.
 
 ## Running
 
