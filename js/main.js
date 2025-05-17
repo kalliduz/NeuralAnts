@@ -65,6 +65,7 @@ window.addEventListener('load', () => {
             maxAnts: parseInt(document.getElementById('maxAntsInput').value, 10) || 20,
             foodSpawnChance: parseFloat(document.getElementById('foodSpawnInput').value) || 0.02,
             maxFood: parseInt(document.getElementById('maxFoodInput').value, 10) || 50,
+            initialFood: parseInt(document.getElementById('initialFoodInput').value, 10) || 10,
             reproductionEnergyThreshold: parseInt(document.getElementById('reproEnergyInput').value, 10) || 120,
             reproductionEnergyCost: parseInt(document.getElementById('reproCostInput').value, 10) || 40,
             energyDecayRate: parseFloat(document.getElementById('energyDecayInput').value) || 0.1,

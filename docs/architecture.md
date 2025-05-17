@@ -34,7 +34,9 @@ quickly.
 A simple configuration object is passed to `Simulation`, `Environment` and
 `Ant` to control parameters like canvas size, food spawn rate and energy
 behaviour. These parameters are exposed in `main.html` so users can tweak the
-simulation without modifying the code.
+simulation without modifying the code. One such option is `initialFood`, which
+sets the number of food objects that exist when the environment is first
+created.
 Any future parameters that meaningfully change the simulation should also be
 added to this configuration so they remain user controllable.
 
