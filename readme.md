@@ -19,3 +19,12 @@ or build step is required.
 - `docs/` – project documentation
 
 See `docs/architecture.md` for a high level overview.
+
+## Running Tests
+
+The repository includes a suite of unit tests that exercise the core
+JavaScript classes. Run them with Node's built-in test runner:
+
+```bash
+npm test
+```

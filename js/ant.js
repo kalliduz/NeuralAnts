@@ -55,3 +55,7 @@ class Ant {
         ctx.fill();
     }
 }
+
+if (typeof module !== 'undefined') {
+    module.exports = Ant;
+}

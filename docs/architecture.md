@@ -42,3 +42,15 @@ quickly.
 Open `main.html` in any modern browser. No server is required. For local
 experiments, you can also run `python -m http.server` and navigate to the
 served page.
+
+## Testing
+
+Unit tests live in the `test/` directory and can be executed with Node's
+built-in test runner:
+
+```bash
+npm test
+```
+
+The tests load the same JavaScript classes used by the browser, so no build
+step is required.

@@ -53,3 +53,7 @@ class Environment {
         });
     }
 }
+
+if (typeof module !== 'undefined') {
+    module.exports = Environment;
+}
