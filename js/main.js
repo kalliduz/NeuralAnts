@@ -53,6 +53,7 @@ class Simulation {
     }
 }
 
+if (typeof window !== 'undefined') {
 window.addEventListener('load', () => {
     const btn = document.getElementById('startBtn');
     btn.addEventListener('click', () => {
@@ -80,3 +81,8 @@ window.addEventListener('load', () => {
         sim.start();
     });
 });
+}
+
+if (typeof module !== 'undefined') {
+    module.exports = Simulation;
+}
