@@ -44,3 +44,8 @@ class Brain {
 function sigmoid(x) {
     return 1 / (1 + Math.exp(-x));
 }
+
+// Export for Node.js testing without affecting browser usage
+if (typeof module !== 'undefined') {
+    module.exports = Brain;
+}

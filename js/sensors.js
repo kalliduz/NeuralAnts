@@ -27,3 +27,8 @@ class Sensors {
         return [dirX, dirY, distNorm];
     }
 }
+
+// Export for Node.js testing
+if (typeof module !== 'undefined') {
+    module.exports = Sensors;
+}

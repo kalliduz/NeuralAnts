@@ -10,3 +10,7 @@ class Actors {
         this.ant.vy = dy * speed;
     }
 }
+
+if (typeof module !== 'undefined') {
+    module.exports = Actors;
+}

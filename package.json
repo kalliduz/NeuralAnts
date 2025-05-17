@@ -1,0 +1,8 @@
+{
+  "name": "neural-ants",
+  "version": "1.0.0",
+  "description": "Browser-based ant colony simulation with neural networks",
+  "scripts": {
+    "test": "node --test"
+  }
+}
