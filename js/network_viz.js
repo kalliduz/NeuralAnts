@@ -53,3 +53,8 @@ class NetworkViz {
         ctx.fill();
     }
 }
+
+if (typeof module !== 'undefined') {
+    module.exports = NetworkViz;
+}
+
