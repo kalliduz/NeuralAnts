@@ -20,7 +20,8 @@ runs without any build step; simply open `main.html` in a browser.
 - **Simulation**: Manages the environment and the set of ants. It accepts a
   starting ant count and a configuration object so multiple ants can compete
   from the beginning of the simulation. Responsible for updating and rendering
-  everything each frame.
+  everything each frame. Ants that run out of energy are removed from the
+  simulation.
 - **NetworkViz**: Renders the neural network of the first ant onto a small
   canvas so that weights, topology and current neuron activations can be
   observed. Node labels describe the meaning of each input and output
