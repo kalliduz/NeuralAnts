@@ -11,3 +11,9 @@ test('Environment spawns food when random condition met', () => {
   Math.random = origRandom;
   assert.strictEqual(env.food.length, 1);
 });
+
+test('Environment creates initial food items', () => {
+  const env = new Environment({initialFood: 5});
+  assert.strictEqual(env.food.length, 5);
+});
+

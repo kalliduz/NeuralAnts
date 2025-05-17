@@ -3,6 +3,7 @@ class Environment {
         this.width = config.width || 800;
         this.height = config.height || 600;
         this.maxFood = config.maxFood || 50;
+        this.initialFood = config.initialFood || 10;
         this.foodSpawnChance = config.foodSpawnChance || 0.02;
         this.obstacleCount = config.obstacleCount || 5;
         this.food = [];
@@ -14,6 +15,12 @@ class Environment {
                 y: Math.random() * (this.height - 40),
                 w: 20 + Math.random() * 20,
                 h: 20 + Math.random() * 20
+            });
+        }
+        for (let i = 0; i < this.initialFood && this.food.length < this.maxFood; i++) {
+            this.food.push({
+                x: Math.random() * this.width,
+                y: Math.random() * this.height
             });
         }
     }
