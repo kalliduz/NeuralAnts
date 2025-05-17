@@ -1,9 +1,12 @@
 class Simulation {
-    constructor(canvasId) {
+    constructor(canvasId, initialAnts = 10) {
         const canvas = document.getElementById(canvasId);
         this.ctx = canvas.getContext('2d');
         this.environment = new Environment();
-        this.ants = [new Ant(this.environment)];
+        this.ants = [];
+        for (let i = 0; i < initialAnts; i++) {
+            this.ants.push(new Ant(this.environment));
+        }
         this.maxAnts = 20;
         this.networkViz = new NetworkViz('networkCanvas');
     }
@@ -47,6 +50,13 @@ class Simulation {
 }
 
 window.addEventListener('load', () => {
-    const sim = new Simulation('simulationCanvas');
-    sim.start();
+    const btn = document.getElementById('startBtn');
+    btn.addEventListener('click', () => {
+        const input = document.getElementById('antCountInput');
+        const count = parseInt(input.value, 10) || 1;
+        btn.disabled = true;
+        input.disabled = true;
+        const sim = new Simulation('simulationCanvas', count);
+        sim.start();
+    });
 });
