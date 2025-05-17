@@ -40,4 +40,17 @@ test('Simulation respects maximum ant count', () => {
   assert.strictEqual(sim.ants.length, 2);
 });
 
+test('Simulation removes ants with no energy', () => {
+  const sim = new Simulation('canvas', 2, {
+    maxAnts: 5,
+    reproductionEnergyThreshold: 100,
+    energyDecayRate: 0
+  });
+  sim.ants[0].energy = 0;
+  sim.ants[1].energy = 10;
+  sim.update();
+  assert.strictEqual(sim.ants.length, 1);
+  assert.ok(sim.ants[0].energy > 0);
+});
+
 

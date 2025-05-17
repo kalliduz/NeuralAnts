@@ -18,6 +18,8 @@ class Simulation {
     update() {
         this.environment.update();
         this.ants.forEach(ant => ant.update());
+        // remove dead ants
+        this.ants = this.ants.filter(a => a.energy > 0);
         // reproduction
         const newAnts = [];
         this.ants.forEach(ant => {
