@@ -1,5 +1,5 @@
 class Ant {
-    constructor(environment) {
+    constructor(environment, config = {}) {
         this.x = environment.width / 2;
         this.y = environment.height / 2;
         this.vx = 0;
@@ -8,7 +8,11 @@ class Ant {
         this.sensors = new Sensors(this, environment);
         this.actors = new Actors(this);
         this.environment = environment;
-        this.energy = 100;
+        this.initialEnergy = config.initialEnergy || 100;
+        this.energy = this.initialEnergy;
+        this.energyDecayRate = config.energyDecayRate || 0.1;
+        this.foodEnergyGain = config.foodEnergyGain || 20;
+        this.pheromoneLife = config.pheromoneLife || 100;
         this.age = 0;
     }
 
@@ -32,21 +36,21 @@ class Ant {
         });
 
         // energy usage and food consumption
-        this.energy -= 0.1;
+        this.energy -= this.energyDecayRate;
         let ate = false;
         this.environment.food = this.environment.food.filter(f => {
             const eat = Math.hypot(f.x - this.x, f.y - this.y) <= 5;
             if (eat) ate = true;
             return !eat;
         });
-        if (ate) this.energy = Math.min(100, this.energy + 20);
+        if (ate) this.energy = Math.min(this.initialEnergy, this.energy + this.foodEnergyGain);
 
         // leave pheromone
-        this.environment.pheromones.push({ x: this.x, y: this.y, life: 100 });
+        this.environment.pheromones.push({ x: this.x, y: this.y, life: this.pheromoneLife });
     }
 
     draw(ctx) {
-        const ratio = Math.max(this.energy, 0) / 100;
+        const ratio = Math.max(this.energy, 0) / this.initialEnergy;
         const r = Math.floor(255 * (1 - ratio));
         const g = Math.floor(255 * ratio);
         ctx.fillStyle = `rgb(${r},${g},0)`;

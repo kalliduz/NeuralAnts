@@ -18,14 +18,22 @@ runs without any build step; simply open `main.html` in a browser.
 - **Actors**: Modify the ant or environment based on brain outputs (velocity
   updates).
 - **Simulation**: Manages the environment and the set of ants. It accepts a
-  starting ant count so multiple ants can compete from the beginning of the
-  simulation. Responsible for updating and rendering everything each frame.
+  starting ant count and a configuration object so multiple ants can compete
+  from the beginning of the simulation. Responsible for updating and rendering
+  everything each frame.
 - **NetworkViz**: Renders the neural network of the first ant onto a small
   canvas so that weights and topology can be observed.
 
 Each component is implemented as a plain JavaScript class in the `js/`
 folder. The classes are intentionally lightweight so that the demo loads
 quickly.
+
+A simple configuration object is passed to `Simulation`, `Environment` and
+`Ant` to control parameters like canvas size, food spawn rate and energy
+behaviour. These parameters are exposed in `main.html` so users can tweak the
+simulation without modifying the code.
+Any future parameters that meaningfully change the simulation should also be
+added to this configuration so they remain user controllable.
 
 ## Additional Features
 

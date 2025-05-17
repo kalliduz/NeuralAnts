@@ -1,11 +1,14 @@
 class Environment {
-    constructor() {
-        this.width = 800;
-        this.height = 600;
+    constructor(config = {}) {
+        this.width = config.width || 800;
+        this.height = config.height || 600;
+        this.maxFood = config.maxFood || 50;
+        this.foodSpawnChance = config.foodSpawnChance || 0.02;
+        this.obstacleCount = config.obstacleCount || 5;
         this.food = [];
         this.pheromones = [];
         this.obstacles = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < this.obstacleCount; i++) {
             this.obstacles.push({
                 x: Math.random() * (this.width - 40),
                 y: Math.random() * (this.height - 40),
@@ -17,7 +20,7 @@ class Environment {
 
     update() {
         // spawn new food occasionally
-        if (this.food.length < 50 && Math.random() < 0.02) {
+        if (this.food.length < this.maxFood && Math.random() < this.foodSpawnChance) {
             this.food.push({
                 x: Math.random() * this.width,
                 y: Math.random() * this.height

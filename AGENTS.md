@@ -9,3 +9,6 @@ fixes, please keep the following in mind:
   changes.
 - Keep examples minimal and lightweight so that the demo loads quickly.
 - Update `readme.md` with any new usage instructions.
+- Make important simulation parameters user definable. Any future parameters
+  that significantly affect the simulation should have a corresponding UI
+  input so users can tweak them.
