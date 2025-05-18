@@ -40,8 +40,11 @@ class Brain {
         const dirY = raw[1] / mag;
         const speed = inputs[2];
         const deposit = sigmoid(raw[2]);
-        this.lastOutput = [dirX, dirY, speed, deposit];
-        return this.lastOutput;
+        // lastOutput is used by the network visualisation which expects only
+        // the three actual network outputs. Speed is not produced by the
+        // network so we omit it here.
+        this.lastOutput = [dirX, dirY, deposit];
+        return [dirX, dirY, speed, deposit];
     }
 }
 

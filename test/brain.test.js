@@ -31,5 +31,7 @@ test('Brain stores activations from last process call', () => {
   brain.process(inp);
   assert.deepStrictEqual(brain.lastInput, inp);
   assert.strictEqual(brain.lastHidden.length, brain.hiddenSize);
-  assert.strictEqual(brain.lastOutput.length, 4);
+  // lastOutput excludes the speed value used by the actors, so it should only
+  // contain the three real network outputs.
+  assert.strictEqual(brain.lastOutput.length, 3);
 });
