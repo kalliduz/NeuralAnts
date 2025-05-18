@@ -54,6 +54,16 @@ class Ant {
         ctx.beginPath();
         ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
         ctx.fill();
+
+        // small energy bar above the ant
+        const barWidth = 6;
+        const barHeight = 2;
+        const barX = this.x - barWidth / 2;
+        const barY = this.y - 5;
+        ctx.fillStyle = '#0000ff';
+        ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
+        ctx.strokeStyle = '#000';
+        ctx.strokeRect(barX, barY, barWidth, barHeight);
     }
 }
 
