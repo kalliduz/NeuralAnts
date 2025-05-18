@@ -7,14 +7,15 @@ runs without any build step; simply open `main.html` in a browser.
 
 ## Components
 
-- **Environment**: Holds global state such as food locations and terrain
-  information. It spawns food items over time and exposes update and draw
-  methods.
+- **Environment**: Holds global state such as food locations, the nest position
+  and terrain information. It spawns food items over time and exposes update and
+  draw methods.
 - **Ant**: Represents an individual ant with a position, sensors and actors.
 - **Brain**: Processes sensor data through a tiny feed-forward network and
   returns movement commands. Networks are mutated when ants reproduce.
-- **Sensors**: Collect information from the environment for an ant. They
-  currently return the direction and distance to the nearest food source.
+- **Sensors**: Collect information from the environment for an ant. They return
+  the direction and distance to the nearest food source, pheromone guidance and
+  a vector pointing back to the nest so ants can learn to return.
 - **Actors**: Modify the ant or environment based on brain outputs (velocity
   updates).
 - **Simulation**: Manages the environment and the set of ants. It accepts a
@@ -48,6 +49,8 @@ added to this configuration so they remain user controllable.
   Ants may deposit pheromone through an actor and the levels decay over time.
   Sensors provide the direction to the strongest cell so ants can follow
   trails.
+- **Nest**: A fixed point in the environment acts as the colony's nest. Ants
+  carry food back here to convert it into energy.
 - **Obstacles**: The environment spawns a few random rectangular obstacles that
   ants must navigate around.
 - **Evolution**: When an ant has high energy it creates a mutated offspring,

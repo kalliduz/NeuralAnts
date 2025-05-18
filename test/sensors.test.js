@@ -20,7 +20,7 @@ test('Sensors returns zeros when no food', () => {
   const env = createEnv([]);
   const ant = new Ant(env);
   const sensors = new Sensors(ant, env);
-  assert.deepStrictEqual(sensors.read(), [0, 0, 0, 0, 0, 0]);
+  assert.deepStrictEqual(sensors.read(), [0, 0, 0, 0, 0, 0, 0, 0]);
 });
 
 test('Sensors detects nearest food direction', () => {

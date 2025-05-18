@@ -14,6 +14,7 @@ class Ant {
         this.foodEnergyGain = config.foodEnergyGain || 20;
         this.pheromoneLife = config.pheromoneLife || 100; // unused with map but kept for compatibility
         this.age = 0;
+        this.carryingFood = false;
     }
 
     update() {
@@ -43,7 +44,17 @@ class Ant {
             if (eat) ate = true;
             return !eat;
         });
-        if (ate) this.energy = Math.min(this.initialEnergy, this.energy + this.foodEnergyGain);
+        if (ate) this.carryingFood = true;
+
+        if (this.carryingFood) {
+            const dNest = Math.hypot(this.x - this.environment.nest.x,
+                                     this.y - this.environment.nest.y);
+            if (dNest <= 10) {
+                this.energy = Math.min(this.initialEnergy,
+                    this.energy + this.foodEnergyGain);
+                this.carryingFood = false;
+            }
+        }
     }
 
     draw(ctx) {

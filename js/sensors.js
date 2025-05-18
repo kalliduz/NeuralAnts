@@ -44,7 +44,13 @@ class Sensors {
             }
         }
 
-        return [dirX, dirY, distNorm, pDirX, pDirY, maxVal];
+        const ndx = this.environment.nest.x - this.ant.x;
+        const ndy = this.environment.nest.y - this.ant.y;
+        const nd = Math.hypot(ndx, ndy) || 1;
+        const nestX = ndx / nd;
+        const nestY = ndy / nd;
+
+        return [dirX, dirY, distNorm, pDirX, pDirY, maxVal, nestX, nestY];
     }
 }
 

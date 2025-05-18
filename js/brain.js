@@ -1,5 +1,5 @@
 class Brain {
-    constructor(inputSize = 6, hiddenSize = 4, outputSize = 3) {
+    constructor(inputSize = 8, hiddenSize = 4, outputSize = 3) {
         this.inputSize = inputSize;
         this.hiddenSize = hiddenSize;
         this.outputSize = outputSize;
