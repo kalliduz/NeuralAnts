@@ -26,7 +26,7 @@ test('Environment places nest at canvas centre', () => {
 test('Environment decays pheromones', () => {
   const env = new Environment({pheromoneDecayRate: 0.5});
   env.deposit(10, 10, 1);
-  env.update();
+  env.updatePheromones();
   const cx = Math.floor(10 / env.cellSize);
   const cy = Math.floor(10 / env.cellSize);
   assert.ok(env.pheromoneMap[cx][cy] < 1);
