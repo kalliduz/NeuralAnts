@@ -14,6 +14,10 @@ class Environment {
         this.pheromoneMap = Array.from({ length: this.mapWidth }, () =>
             Array.from({ length: this.mapHeight }, () => 0)
         );
+        this.nest = {
+            x: this.width / 2,
+            y: this.height / 2
+        };
         this.obstacles = [];
         for (let i = 0; i < this.obstacleCount; i++) {
             this.obstacles.push({
@@ -55,6 +59,12 @@ class Environment {
     draw(ctx) {
         ctx.fillStyle = '#fafafa';
         ctx.fillRect(0, 0, this.width, this.height);
+
+        // nest
+        ctx.fillStyle = '#bbb';
+        ctx.beginPath();
+        ctx.arc(this.nest.x, this.nest.y, 10, 0, Math.PI * 2);
+        ctx.fill();
 
         // obstacles
         ctx.fillStyle = '#888';

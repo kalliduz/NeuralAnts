@@ -17,6 +17,12 @@ test('Environment creates initial food items', () => {
   assert.strictEqual(env.food.length, 5);
 });
 
+test('Environment places nest at canvas centre', () => {
+  const env = new Environment({width: 200, height: 100});
+  assert.strictEqual(env.nest.x, 100);
+  assert.strictEqual(env.nest.y, 50);
+});
+
 test('Environment decays pheromones', () => {
   const env = new Environment({pheromoneDecayRate: 0.5});
   env.deposit(10, 10, 1);

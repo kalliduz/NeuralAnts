@@ -19,6 +19,10 @@ ants are alive, how much food exists and the average energy as the simulation
 runs. Each ant also displays a tiny blue bar above it representing its current
 energy level. No server or build step is required.
 
+Ants now carry food back to a grey nest in the centre of the canvas. The
+neural network receives an extra input representing the direction to this nest
+so that learned behaviours can include returning home.
+
 ## Repository Structure
 
 - `main.html` – entry point that loads all scripts
