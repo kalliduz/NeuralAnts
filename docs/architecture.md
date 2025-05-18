@@ -44,7 +44,8 @@ added to this configuration so they remain user controllable.
 ## Additional Features
 
 - **Energy**: Ants lose energy as they move and regain it when eating food. The
-  colour of each ant reflects its current energy level.
+  colour of each ant reflects its current energy level. A tiny blue bar above
+  each ant indicates the remaining energy ratio.
 - **Pheromones**: A grid based map stores pheromone levels for each cell.
   Ants may deposit pheromone through an actor and the levels decay over time.
   Sensors provide the direction to the strongest cell so ants can follow
