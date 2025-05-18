@@ -12,4 +12,4 @@ already been implemented in the codebase.
 - [ ] Create a central nest that ants can return to with food.
 - [x] Remove dead ants from `Simulation.ants` once energy runs out.
 - [ ] Move pheromone decay logic to `Environment.updatePheromones()`.
-- [ ] Draw a small energy bar above each ant for quick status feedback.
+- [x] Draw a small energy bar above each ant for quick status feedback.
