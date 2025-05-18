@@ -40,6 +40,10 @@ class Environment {
             });
         }
 
+        this.updatePheromones();
+    }
+
+    updatePheromones() {
         // decay pheromone map
         for (let x = 0; x < this.mapWidth; x++) {
             for (let y = 0; y < this.mapHeight; y++) {
