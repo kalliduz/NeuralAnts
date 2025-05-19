@@ -11,7 +11,8 @@ can set how many ants to spawn and tweak advanced parameters using the input
 fields at the top of the page. One of these options, **Initial food**, controls
 how many food items are placed in the environment when the simulation begins.
 Another option, **Pheromone decay**, defines how quickly deposited pheromones
-fade from the map.
+fade from the map. **Pheromone blur** controls how much the trail intensity is
+smoothed between neighbouring cells.
 A second canvas shows a visualisation of the neural network used by the first
 ant. Neuron activations and labels are displayed so you can see how inputs
 translate to outputs. A small stats line under the start button shows how many

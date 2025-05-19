@@ -8,7 +8,7 @@ already been implemented in the codebase.
 - [x] Add pheromone trails for communication between ants.
 - [x] Expand environment with obstacles or varied terrain.
 - [x] Provide a simple neural network visualisation.
-- [ ] Fade pheromone trails smoothly for better visuals.
+- [x] Fade pheromone trails smoothly for better visuals.
 - [ ] Create a central nest that ants can return to with food.
 - [x] Remove dead ants from `Simulation.ants` once energy runs out.
 - [x] Move pheromone decay logic to `Environment.updatePheromones()`.
