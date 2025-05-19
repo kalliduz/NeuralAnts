@@ -85,6 +85,7 @@ window.addEventListener('load', () => {
             foodEnergyGain: parseInt(document.getElementById('foodEnergyInput').value, 10) || 20,
             pheromoneDecayRate: parseFloat(document.getElementById('pheromoneDecayInput').value) || 0.01,
             pheromoneCellSize: parseInt(document.getElementById('pheromoneCellSizeInput').value, 10) || 20,
+            pheromoneBlur: parseFloat(document.getElementById('pheromoneBlurInput').value) || 0,
             obstacleCount: parseInt(document.getElementById('obstacleCountInput').value, 10) || 5,
             width: parseInt(document.getElementById('widthInput').value, 10) || 800,
             height: parseInt(document.getElementById('heightInput').value, 10) || 600

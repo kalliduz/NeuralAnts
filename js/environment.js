@@ -7,6 +7,7 @@ class Environment {
         this.foodSpawnChance = config.foodSpawnChance || 0.02;
         this.obstacleCount = config.obstacleCount || 5;
         this.pheromoneDecayRate = config.pheromoneDecayRate || 0.01;
+        this.pheromoneBlur = config.pheromoneBlur || 0;
         this.cellSize = config.pheromoneCellSize || 20;
         this.mapWidth = Math.ceil(this.width / this.cellSize);
         this.mapHeight = Math.ceil(this.height / this.cellSize);
@@ -48,11 +49,37 @@ class Environment {
     }
 
     updatePheromones() {
-        // decay pheromone map
+        const decayFactor = 1 - this.pheromoneDecayRate;
         for (let x = 0; x < this.mapWidth; x++) {
             for (let y = 0; y < this.mapHeight; y++) {
-                this.pheromoneMap[x][y] = Math.max(0, this.pheromoneMap[x][y] - this.pheromoneDecayRate);
+                this.pheromoneMap[x][y] = Math.max(0, this.pheromoneMap[x][y] * decayFactor);
             }
+        }
+
+        if (this.pheromoneBlur > 0) {
+            const newMap = Array.from({ length: this.mapWidth }, () =>
+                Array.from({ length: this.mapHeight }, () => 0)
+            );
+            for (let x = 0; x < this.mapWidth; x++) {
+                for (let y = 0; y < this.mapHeight; y++) {
+                    let sum = 0;
+                    let count = 0;
+                    for (let dx = -1; dx <= 1; dx++) {
+                        for (let dy = -1; dy <= 1; dy++) {
+                            const nx = x + dx;
+                            const ny = y + dy;
+                            if (nx >= 0 && nx < this.mapWidth && ny >= 0 && ny < this.mapHeight) {
+                                sum += this.pheromoneMap[nx][ny];
+                                count++;
+                            }
+                        }
+                    }
+                    const avg = sum / count;
+                    newMap[x][y] = (1 - this.pheromoneBlur) * this.pheromoneMap[x][y] +
+                        this.pheromoneBlur * avg;
+                }
+            }
+            this.pheromoneMap = newMap;
         }
     }
 

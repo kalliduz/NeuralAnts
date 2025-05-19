@@ -10,8 +10,9 @@ runs without any build step; simply open `main.html` in a browser.
 
 - **Environment**: Holds global state such as food locations, the nest position and terrain
   information. It spawns food items over time and exposes update and draw
-  methods. Pheromone decay now occurs inside `updatePheromones()`, which is
-  called by `update()` each frame.
+  methods. Pheromone decay now occurs inside `updatePheromones()`, which
+  multiplies each cell by `(1 - pheromoneDecayRate)` and can blur neighbouring
+  values for smoother trails. This function is called by `update()` each frame.
 - **Ant**: Represents an individual ant with a position, sensors and actors.
 - **Brain**: Processes sensor data through a tiny feed-forward network and
   returns movement commands. Networks are mutated when ants reproduce.
@@ -51,7 +52,8 @@ added to this configuration so they remain user controllable.
 - **Pheromones**: A grid based map stores pheromone levels for each cell.
   Ants may deposit pheromone through an actor and the levels decay over time.
   Sensors provide the direction to the strongest cell so ants can follow
-  trails. Decay logic resides in `Environment.updatePheromones()
+  trails. Decay logic resides in `Environment.updatePheromones()` where levels
+  are multiplied by the decay rate and can be blurred to create softer trails.
 - **Nest**: A fixed point in the environment acts as the colony's nest. Ants
   carry food back here to convert it into energy.
 - **Obstacles**: The environment spawns a few random rectangular obstacles that

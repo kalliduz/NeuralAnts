@@ -32,3 +32,12 @@ test('Environment decays pheromones', () => {
   assert.ok(env.pheromoneMap[cx][cy] < 1);
 });
 
+test('Pheromone decay is multiplicative', () => {
+  const env = new Environment({pheromoneDecayRate: 0.5});
+  env.deposit(20, 20, 1);
+  env.updatePheromones();
+  const cx = Math.floor(20 / env.cellSize);
+  const cy = Math.floor(20 / env.cellSize);
+  assert.ok(Math.abs(env.pheromoneMap[cx][cy] - 0.5) < 1e-6);
+});
+
