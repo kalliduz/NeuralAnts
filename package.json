@@ -2,6 +2,7 @@
   "name": "neural-ants",
   "version": "1.0.0",
   "description": "Browser-based ant colony simulation with neural networks",
+  "type": "module",
   "scripts": {
     "test": "node --test"
   }

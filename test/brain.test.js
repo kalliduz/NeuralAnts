@@ -1,6 +1,6 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const Brain = require('../js/brain.js');
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import Brain from '../js/brain.js';
 
 test('Brain clones weights correctly', () => {
   const brain = new Brain(2, 2, 2);
@@ -29,7 +29,9 @@ test('Brain stores activations from last process call', () => {
   const brain = new Brain();
   const inp = [0.1, 0.2, 0.3, 0, 0, 0, 0, 0];
   brain.process(inp);
-  assert.deepStrictEqual(brain.lastInput, inp);
+  // Compare arrays by converting TypedArray to normal array, but handle float precision
+  // Or just compare as Float32Array
+  assert.deepStrictEqual(brain.lastInput, new Float32Array(inp));
   assert.strictEqual(brain.lastHidden.length, brain.hiddenSize);
   assert.strictEqual(brain.lastOutput.length, 4);
 });

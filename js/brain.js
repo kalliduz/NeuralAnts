@@ -1,4 +1,4 @@
-class Brain {
+export default class Brain {
     constructor(inputSize = 8, hiddenSize = 4, outputSize = 3) {
         this.inputSize = inputSize;
         this.hiddenSize = hiddenSize;
@@ -9,6 +9,11 @@ class Brain {
         this.weights2 = Array.from({ length: outputSize }, () =>
             Array.from({ length: hiddenSize }, () => Math.random() * 2 - 1)
         );
+
+        // Pre-allocate arrays for performance
+        this.lastInput = new Float32Array(inputSize);
+        this.lastHidden = new Float32Array(hiddenSize);
+        this.lastOutput = new Float32Array(4); // Fixed size 4 for actions [dx, dy, deposit, speed]
     }
 
     clone() {
@@ -27,29 +32,45 @@ class Brain {
     }
 
     process(inputs) {
-        this.lastInput = inputs.slice();
-        const hidden = this.weights1.map(row =>
-            sigmoid(row.reduce((sum, w, i) => sum + w * inputs[i], 0))
-        );
-        this.lastHidden = hidden.slice();
-        const raw = this.weights2.map(row =>
-            row.reduce((sum, w, i) => sum + w * hidden[i], 0)
-        );
+        // Copy inputs to avoid reference issues and for viz
+        for (let i = 0; i < this.inputSize; i++) {
+            this.lastInput[i] = inputs[i];
+        }
+
+        // Hidden layer
+        for (let i = 0; i < this.hiddenSize; i++) {
+            let sum = 0;
+            for (let j = 0; j < this.inputSize; j++) {
+                sum += this.weights1[i][j] * inputs[j];
+            }
+            this.lastHidden[i] = sigmoid(sum);
+        }
+
+        // Output layer
+        const raw = new Float32Array(this.outputSize);
+        for (let i = 0; i < this.outputSize; i++) {
+            let sum = 0;
+            for (let j = 0; j < this.hiddenSize; j++) {
+                sum += this.weights2[i][j] * this.lastHidden[j];
+            }
+            raw[i] = sum;
+        }
+
         const mag = Math.hypot(raw[0], raw[1]) || 1;
         const dirX = raw[0] / mag;
         const dirY = raw[1] / mag;
         const speed = inputs[2];
         const deposit = sigmoid(raw[2]);
-        this.lastOutput = [dirX, dirY, speed, deposit];
+
+        this.lastOutput[0] = dirX;
+        this.lastOutput[1] = dirY;
+        this.lastOutput[2] = deposit; // Neuron 3
+        this.lastOutput[3] = speed;   // Pass-through
+
         return this.lastOutput;
     }
 }
 
 function sigmoid(x) {
     return 1 / (1 + Math.exp(-x));
-}
-
-// Export for Node.js testing without affecting browser usage
-if (typeof module !== 'undefined') {
-    module.exports = Brain;
 }

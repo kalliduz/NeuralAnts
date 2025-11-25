@@ -1,7 +1,6 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-
-const NetworkViz = require('../js/network_viz.js');
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import NetworkViz from '../js/network_viz.js';
 
 global.document = { getElementById: () => ({ getContext: () => ({}) }) };
 

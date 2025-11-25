@@ -3,8 +3,8 @@
 This repository is a simple browser-based experiment. When adding features or
 fixes, please keep the following in mind:
 
-- The simulation must remain runnable by simply opening `main.html` in a
-  browser. Avoid build tools or frameworks that require a server.
+- The simulation uses ES Modules, so a local server is required to run it.
+  Avoid complex build tools like Webpack/Vite unless necessary.
 - Update `docs/architecture.md` whenever the overall design or file structure
   changes.
 - Keep examples minimal and lightweight so that the demo loads quickly.

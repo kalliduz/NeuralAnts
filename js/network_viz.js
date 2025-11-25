@@ -1,4 +1,4 @@
-class NetworkViz {
+export default class NetworkViz {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
@@ -7,54 +7,59 @@ class NetworkViz {
     draw(brain) {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        const radius = 5;
-        const layerX = [20, this.canvas.width / 2, this.canvas.width - 20];
+
+        // Background
+        ctx.fillStyle = '#222';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        const radius = 6;
+        const layerX = [30, this.canvas.width / 2, this.canvas.width - 30];
         const inputY = this._nodePositions(brain.inputSize, this.canvas.height);
         const hiddenY = this._nodePositions(brain.hiddenSize, this.canvas.height);
         const outputY = this._nodePositions(brain.outputSize, this.canvas.height);
 
-        const inputActs = brain.lastInput || Array(brain.inputSize).fill(0);
-        const hiddenActs = brain.lastHidden || Array(brain.hiddenSize).fill(0);
-        const outputActs = brain.lastOutput || Array(brain.outputSize).fill(0);
+        const inputActs = brain.lastInput || new Float32Array(brain.inputSize);
+        const hiddenActs = brain.lastHidden || new Float32Array(brain.hiddenSize);
+        const outputActs = brain.lastOutput || new Float32Array(brain.outputSize);
 
         const inputLabels = [
-            'foodX', 'foodY', 'foodDist',
-            'pherX', 'pherY', 'pher',
-            'nestX', 'nestY'
+            'FdX', 'FdY', 'FdD',
+            'PhX', 'PhY', 'PhV',
+            'NsX', 'NsY'
         ];
-        const outputLabels = ['moveX', 'moveY', 'drop'];
+        const outputLabels = ['MvX', 'MvY', 'Drp'];
 
         // connections input->hidden
-        ctx.strokeStyle = '#999';
         for (let i = 0; i < brain.hiddenSize; i++) {
             for (let j = 0; j < brain.inputSize; j++) {
-                this._line(layerX[0], inputY[j], layerX[1], hiddenY[i]);
+                const w = brain.weights1[i][j];
+                this._line(layerX[0], inputY[j], layerX[1], hiddenY[i], w);
             }
         }
         // connections hidden->output
         for (let i = 0; i < brain.outputSize; i++) {
             for (let j = 0; j < brain.hiddenSize; j++) {
-                this._line(layerX[1], hiddenY[j], layerX[2], outputY[i]);
+                const w = brain.weights2[i][j];
+                this._line(layerX[1], hiddenY[j], layerX[2], outputY[i], w);
             }
         }
+
         // nodes
-        ctx.fillStyle = '#222';
         ctx.textAlign = 'center';
-        ctx.font = '10px Arial';
+        ctx.font = '10px Roboto, Arial';
+
         inputY.forEach((y, i) => {
-            this._circle(layerX[0], y, radius);
-            ctx.fillText(inputActs[i].toFixed(2), layerX[0], y - 8);
-            ctx.fillText(inputLabels[i] || `I${i}`, layerX[0], y + 12);
+            this._circle(layerX[0], y, radius, inputActs[i]);
+            ctx.fillStyle = '#aaa';
+            ctx.fillText(inputLabels[i] || `I${i}`, layerX[0], y + 15);
         });
         hiddenY.forEach((y, i) => {
-            this._circle(layerX[1], y, radius);
-            ctx.fillText(hiddenActs[i].toFixed(2), layerX[1], y - 8);
-            ctx.fillText(`H${i + 1}`, layerX[1], y + 12);
+            this._circle(layerX[1], y, radius, hiddenActs[i]);
         });
         outputY.forEach((y, i) => {
-            this._circle(layerX[2], y, radius);
-            ctx.fillText(outputActs[i].toFixed(2), layerX[2], y - 8);
-            ctx.fillText(outputLabels[i] || `O${i + 1}`, layerX[2], y + 12);
+            this._circle(layerX[2], y, radius, outputActs[i]);
+            ctx.fillStyle = '#aaa';
+            ctx.fillText(outputLabels[i] || `O${i + 1}`, layerX[2], y + 15);
         });
     }
 
@@ -63,23 +68,28 @@ class NetworkViz {
         return Array.from({ length: count }, (_, i) => spacing * (i + 1));
     }
 
-    _line(x1, y1, x2, y2) {
+    _line(x1, y1, x2, y2, weight) {
         const ctx = this.ctx;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
+        const w = Math.abs(weight);
+        ctx.lineWidth = Math.min(w * 2, 3);
+        ctx.strokeStyle = weight > 0 ? `rgba(100, 200, 100, ${Math.min(w, 1)})` : `rgba(200, 100, 100, ${Math.min(w, 1)})`;
         ctx.stroke();
     }
 
-    _circle(x, y, r) {
+    _circle(x, y, r, activation) {
         const ctx = this.ctx;
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
+        // Activation color: black to white/cyan
+        const v = Math.floor(Math.abs(activation) * 255);
+        ctx.fillStyle = `rgb(${v}, ${v}, ${v})`;
         ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
     }
-}
-
-if (typeof module !== 'undefined') {
-    module.exports = NetworkViz;
 }
 

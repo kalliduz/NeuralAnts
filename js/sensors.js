@@ -1,4 +1,4 @@
-class Sensors {
+export default class Sensors {
     constructor(ant, environment) {
         this.ant = ant;
         this.environment = environment;
@@ -9,37 +9,56 @@ class Sensors {
         let dirX = 0, dirY = 0, distNorm = 0;
         if (food.length > 0) {
             // find nearest food
-            let nearest = food[0];
+            // Optimization: Don't create new objects/arrays if possible, but for now logic is fine
+            let nearest = null;
             let minDist = Infinity;
-            for (const f of food) {
+
+            // Simple optimization: avoid sqrt if possible, but we need actual dist for normalization
+            for (let i = 0; i < food.length; i++) {
+                const f = food[i];
                 const dx = f.x - this.ant.x;
                 const dy = f.y - this.ant.y;
-                const d = Math.hypot(dx, dy);
-                if (d < minDist) {
-                    minDist = d;
+                const dSq = dx * dx + dy * dy;
+                if (dSq < minDist) {
+                    minDist = dSq;
                     nearest = f;
                 }
             }
-            dirX = (nearest.x - this.ant.x) / (minDist || 1);
-            dirY = (nearest.y - this.ant.y) / (minDist || 1);
-            distNorm = Math.min(minDist / 100, 1);
+
+            if (nearest) {
+                const d = Math.sqrt(minDist);
+                dirX = (nearest.x - this.ant.x) / (d || 1);
+                dirY = (nearest.y - this.ant.y) / (d || 1);
+                distNorm = Math.min(d / 100, 1);
+            }
         }
 
         // strongest pheromone direction
         let maxVal = 0;
         let pDirX = 0, pDirY = 0;
-        for (let x = 0; x < this.environment.mapWidth; x++) {
-            for (let y = 0; y < this.environment.mapHeight; y++) {
-                const val = this.environment.pheromoneMap[x][y];
-                if (val > maxVal) {
-                    maxVal = val;
-                    const cx = x * this.environment.cellSize + this.environment.cellSize / 2;
-                    const cy = y * this.environment.cellSize + this.environment.cellSize / 2;
-                    const dx = cx - this.ant.x;
-                    const dy = cy - this.ant.y;
-                    const d = Math.hypot(dx, dy) || 1;
-                    pDirX = dx / d;
-                    pDirY = dy / d;
+
+        // Optimization: Don't scan the whole map! Only scan local area.
+        // The original code scanned the ENTIRE map for every ant? That's O(MapSize * AntCount). Terrible.
+        // Let's scan a 3x3 or 5x5 grid around the ant.
+
+        const cx = Math.floor(this.ant.x / this.environment.cellSize);
+        const cy = Math.floor(this.ant.y / this.environment.cellSize);
+        const range = 2; // Check 2 cells radius
+
+        for (let x = cx - range; x <= cx + range; x++) {
+            for (let y = cy - range; y <= cy + range; y++) {
+                if (x >= 0 && x < this.environment.mapWidth && y >= 0 && y < this.environment.mapHeight) {
+                    const val = this.environment.pheromoneMap[x][y];
+                    if (val > maxVal) {
+                        maxVal = val;
+                        const cellCenterX = x * this.environment.cellSize + this.environment.cellSize / 2;
+                        const cellCenterY = y * this.environment.cellSize + this.environment.cellSize / 2;
+                        const dx = cellCenterX - this.ant.x;
+                        const dy = cellCenterY - this.ant.y;
+                        const d = Math.hypot(dx, dy) || 1;
+                        pDirX = dx / d;
+                        pDirY = dy / d;
+                    }
                 }
             }
         }
@@ -52,9 +71,4 @@ class Sensors {
 
         return [dirX, dirY, distNorm, pDirX, pDirY, maxVal, nestX, nestY];
     }
-}
-
-// Export for Node.js testing
-if (typeof module !== 'undefined') {
-    module.exports = Sensors;
 }

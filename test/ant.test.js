@@ -1,15 +1,12 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-global.Brain = require('../js/brain.js');
-const Sensors = require('../js/sensors.js');
-global.Sensors = Sensors;
-const Actors = require('../js/actors.js');
-global.Actors = Actors;
-const Environment = require('../js/environment.js');
-const Ant = require('../js/ant.js');
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import Sensors from '../js/sensors.js';
+import Actors from '../js/actors.js';
+import Environment from '../js/environment.js';
+import Ant from '../js/ant.js';
 
-class DummySensors extends Sensors { read() { return [1,0,1,0,0,0,0,0]; } }
-class DummyActors extends Actors { apply() {} }
+class DummySensors extends Sensors { read() { return [1, 0, 1, 0, 0, 0, 0, 0]; } }
+class DummyActors extends Actors { apply() { } }
 
 test('Ant stops updating when out of energy', () => {
   const env = new Environment();
@@ -27,7 +24,7 @@ test('Ant stores food and delivers to nest', () => {
   ant.sensors = new DummySensors(ant, env);
   ant.actors = new DummyActors(ant);
   ant.x = 20; ant.y = 20;
-  env.food = [{x: 20, y: 20}];
+  env.food = [{ x: 20, y: 20 }];
   ant.energy = 50;
   ant.update();
   assert.ok(ant.carryingFood);

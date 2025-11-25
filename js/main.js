@@ -1,4 +1,8 @@
-class Simulation {
+import Environment from './environment.js';
+import Ant from './ant.js';
+import NetworkViz from './network_viz.js';
+
+export default class Simulation {
     constructor(canvasId, initialAnts = 10, config = {}) {
         const canvas = document.getElementById(canvasId);
         this.ctx = canvas.getContext('2d');
@@ -15,6 +19,8 @@ class Simulation {
         this.networkViz = new NetworkViz('networkCanvas');
         this.statsEl = document.getElementById('stats');
         this.stepCount = 0;
+        this.running = false;
+        this.animationId = null;
     }
 
     update() {
@@ -52,54 +58,82 @@ class Simulation {
         if (!this.statsEl) return;
         const avgEnergy = this.ants.reduce((sum, a) => sum + a.energy, 0) /
             (this.ants.length || 1);
-        this.statsEl.textContent =
-            `Ants: ${this.ants.length} | Food: ${this.environment.food.length}` +
-            ` | Step: ${this.stepCount} | Avg energy: ${avgEnergy.toFixed(1)}`;
+        this.statsEl.innerHTML =
+            `<div class="stat-item"><span>Ants</span> <strong>${this.ants.length}</strong></div>` +
+            `<div class="stat-item"><span>Food</span> <strong>${this.environment.food.length}</strong></div>` +
+            `<div class="stat-item"><span>Step</span> <strong>${this.stepCount}</strong></div>` +
+            `<div class="stat-item"><span>Avg Energy</span> <strong>${avgEnergy.toFixed(1)}</strong></div>`;
     }
 
     step() {
+        if (!this.running) return;
         this.update();
         this.draw();
-        requestAnimationFrame(() => this.step());
+        this.animationId = requestAnimationFrame(() => this.step());
     }
 
     start() {
+        if (this.running) return;
+        this.running = true;
         this.step();
+    }
+
+    stop() {
+        this.running = false;
+        if (this.animationId) cancelAnimationFrame(this.animationId);
     }
 }
 
-if (typeof window !== 'undefined') {
-window.addEventListener('load', () => {
-    const btn = document.getElementById('startBtn');
-    btn.addEventListener('click', () => {
-        const input = document.getElementById('antCountInput');
-        const count = parseInt(input.value, 10) || 1;
-        const cfg = {
-            maxAnts: parseInt(document.getElementById('maxAntsInput').value, 10) || 20,
-            foodSpawnChance: parseFloat(document.getElementById('foodSpawnInput').value) || 0.02,
-            maxFood: parseInt(document.getElementById('maxFoodInput').value, 10) || 50,
-            initialFood: parseInt(document.getElementById('initialFoodInput').value, 10) || 10,
-            reproductionEnergyThreshold: parseInt(document.getElementById('reproEnergyInput').value, 10) || 120,
-            reproductionEnergyCost: parseInt(document.getElementById('reproCostInput').value, 10) || 40,
-            energyDecayRate: parseFloat(document.getElementById('energyDecayInput').value) || 0.1,
-            foodEnergyGain: parseInt(document.getElementById('foodEnergyInput').value, 10) || 20,
-            pheromoneDecayRate: parseFloat(document.getElementById('pheromoneDecayInput').value) || 0.01,
-            pheromoneCellSize: parseInt(document.getElementById('pheromoneCellSizeInput').value, 10) || 20,
-            obstacleCount: parseInt(document.getElementById('obstacleCountInput').value, 10) || 5,
-            width: parseInt(document.getElementById('widthInput').value, 10) || 800,
-            height: parseInt(document.getElementById('heightInput').value, 10) || 600
-        };
-        const canvas = document.getElementById('simulationCanvas');
-        canvas.width = cfg.width;
-        canvas.height = cfg.height;
-        btn.disabled = true;
-        input.disabled = true;
-        const sim = new Simulation('simulationCanvas', count, cfg);
-        sim.start();
-    });
-});
-}
+// Entry point
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        let sim = null;
 
-if (typeof module !== 'undefined') {
-    module.exports = Simulation;
+        btn.addEventListener('click', () => {
+            if (sim) {
+                sim.stop();
+            }
+
+            const input = document.getElementById('antCountInput');
+            const count = parseInt(input.value, 10) || 1;
+            const cfg = {
+                maxAnts: parseInt(document.getElementById('maxAntsInput').value, 10) || 20,
+                foodSpawnChance: parseFloat(document.getElementById('foodSpawnInput').value) || 0.02,
+                maxFood: parseInt(document.getElementById('maxFoodInput').value, 10) || 50,
+                initialFood: parseInt(document.getElementById('initialFoodInput').value, 10) || 10,
+                reproductionEnergyThreshold: parseInt(document.getElementById('reproEnergyInput').value, 10) || 120,
+                reproductionEnergyCost: parseInt(document.getElementById('reproCostInput').value, 10) || 40,
+                energyDecayRate: parseFloat(document.getElementById('energyDecayInput').value) || 0.1,
+                foodEnergyGain: parseInt(document.getElementById('foodEnergyInput').value, 10) || 20,
+                pheromoneDecayRate: parseFloat(document.getElementById('pheromoneDecayInput').value) || 0.01,
+                pheromoneCellSize: parseInt(document.getElementById('pheromoneCellSizeInput').value, 10) || 20,
+                obstacleCount: parseInt(document.getElementById('obstacleCountInput').value, 10) || 5,
+                width: parseInt(document.getElementById('widthInput').value, 10) || 800,
+                height: parseInt(document.getElementById('heightInput').value, 10) || 600
+            };
+            const canvas = document.getElementById('simulationCanvas');
+            canvas.width = cfg.width;
+            canvas.height = cfg.height;
+
+            sim = new Simulation('simulationCanvas', count, cfg);
+            sim.start();
+
+            btn.textContent = 'Restart';
+            stopBtn.disabled = false;
+        });
+
+        stopBtn.addEventListener('click', () => {
+            if (sim) {
+                if (sim.running) {
+                    sim.stop();
+                    stopBtn.textContent = 'Resume';
+                } else {
+                    sim.start();
+                    stopBtn.textContent = 'Pause';
+                }
+            }
+        });
+    });
 }

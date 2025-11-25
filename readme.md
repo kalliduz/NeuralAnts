@@ -5,19 +5,23 @@ behaviours through small neural networks that mutate when food is plentiful.
 
 ## Usage
 
-Open `main.html` in any modern browser. The page will display a canvas with a
-population of ants seeking out food that appears over time. Before starting you
-can set how many ants to spawn and tweak advanced parameters using the input
-fields at the top of the page. One of these options, **Initial food**, controls
-how many food items are placed in the environment when the simulation begins.
-Another option, **Pheromone decay**, defines how quickly deposited pheromones
-fade from the map.
-A second canvas shows a visualisation of the neural network used by the first
-ant. Neuron activations and labels are displayed so you can see how inputs
-translate to outputs. A small stats line under the start button shows how many
-ants are alive, how much food exists and the average energy as the simulation
-runs. Each ant also displays a tiny blue bar above it representing its current
-energy level. No server or build step is required.
+To run the simulation, you need to serve the files using a local web server because the project uses ES Modules, which are blocked by CORS when opening `file://` URLs directly in some browsers.
+
+You can use `npx` (included with Node.js) or Python:
+
+```bash
+# Node.js
+npx serve .
+
+# Python
+python -m http.server
+```
+
+Then open the URL (usually `http://localhost:3000` or `http://localhost:8000`) in your browser.
+
+The page will display a canvas with a population of ants seeking out food. You can tweak parameters using the sidebar controls.
+A second canvas shows a visualisation of the neural network used by the first ant.
+Stats are displayed at the top of the simulation area.
 
 Ants now carry food back to a grey nest in the centre of the canvas. The
 neural network receives an extra input representing the direction to this nest

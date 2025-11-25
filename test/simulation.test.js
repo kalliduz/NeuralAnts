@@ -1,22 +1,19 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-
-// Globals required by Ant
-global.Brain = require('../js/brain.js');
-global.Sensors = require('../js/sensors.js');
-global.Actors = require('../js/actors.js');
-global.Environment = require('../js/environment.js');
-global.Ant = require('../js/ant.js');
-global.NetworkViz = require('../js/network_viz.js');
-const Simulation = require('../js/main.js');
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import Simulation from '../js/main.js';
 
 // minimal DOM stubs
 global.document = {
   getElementById: (id) => {
-    if (id === 'stats') return { textContent: '' };
+    if (id === 'stats') return { innerHTML: '', textContent: '' };
     return { getContext: () => ({}) };
-  }
+  },
+  addEventListener: () => { }
 };
+global.window = {
+  addEventListener: () => { }
+};
+global.requestAnimationFrame = () => { };
 
 test('Simulation reproduces when energy threshold exceeded', () => {
   const sim = new Simulation('canvas', 1, {

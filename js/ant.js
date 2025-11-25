@@ -1,4 +1,8 @@
-class Ant {
+import Brain from './brain.js';
+import Sensors from './sensors.js';
+import Actors from './actors.js';
+
+export default class Ant {
     constructor(environment, config = {}) {
         this.x = environment.width / 2;
         this.y = environment.height / 2;
@@ -39,17 +43,24 @@ class Ant {
         // energy usage and food consumption
         this.energy -= this.energyDecayRate;
         let ate = false;
-        this.environment.food = this.environment.food.filter(f => {
-            const eat = Math.hypot(f.x - this.x, f.y - this.y) <= 5;
-            if (eat) ate = true;
-            return !eat;
-        });
+
+        // Optimization: Iterate backwards to remove
+        for (let i = this.environment.food.length - 1; i >= 0; i--) {
+            const f = this.environment.food[i];
+            const distSq = (f.x - this.x) ** 2 + (f.y - this.y) ** 2;
+            if (distSq <= 25) { // 5^2
+                ate = true;
+                // Remove food efficiently
+                this.environment.food[i] = this.environment.food[this.environment.food.length - 1];
+                this.environment.food.pop();
+            }
+        }
+
         if (ate) this.carryingFood = true;
 
         if (this.carryingFood) {
-            const dNest = Math.hypot(this.x - this.environment.nest.x,
-                                     this.y - this.environment.nest.y);
-            if (dNest <= 10) {
+            const dNestSq = (this.x - this.environment.nest.x) ** 2 + (this.y - this.environment.nest.y) ** 2;
+            if (dNestSq <= 100) { // 10^2
                 this.energy = Math.min(this.initialEnergy,
                     this.energy + this.foodEnergyGain);
                 this.carryingFood = false;
@@ -58,26 +69,52 @@ class Ant {
     }
 
     draw(ctx) {
+        if (this.energy <= 0) return;
+
         const ratio = Math.max(this.energy, 0) / this.initialEnergy;
+        // Color based on energy: Green (high) -> Red (low)
+        // Or maybe White -> Darker?
+        // Let's go with a nice gradient or solid color.
+        // High energy: White/Yellow. Low energy: Red.
+
         const r = Math.floor(255 * (1 - ratio));
         const g = Math.floor(255 * ratio);
-        ctx.fillStyle = `rgb(${r},${g},0)`;
+        const b = 100;
+
+        ctx.fillStyle = `rgb(${r + 50},${g + 50},${b})`;
+
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        // Rotate in direction of movement if moving
+        const angle = Math.atan2(this.vy, this.vx);
+        ctx.rotate(angle);
+
+        // Draw ant as a small triangle
         ctx.beginPath();
-        ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+        ctx.moveTo(4, 0);
+        ctx.lineTo(-3, 3);
+        ctx.lineTo(-3, -3);
+        ctx.closePath();
         ctx.fill();
 
-        // small energy bar above the ant
-        const barWidth = 6;
-        const barHeight = 2;
-        const barX = this.x - barWidth / 2;
-        const barY = this.y - 5;
-        ctx.fillStyle = '#0000ff';
-        ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
-        ctx.strokeStyle = '#000';
-        ctx.strokeRect(barX, barY, barWidth, barHeight);
-    }
-}
+        if (this.carryingFood) {
+            ctx.fillStyle = '#e74c3c';
+            ctx.beginPath();
+            ctx.arc(2, 0, 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
 
-if (typeof module !== 'undefined') {
-    module.exports = Ant;
+        ctx.restore();
+
+        // small energy bar above the ant (optional, maybe too cluttered? Let's keep it minimal)
+        // Only show if energy is low?
+        if (ratio < 0.3) {
+            const barWidth = 10;
+            const barHeight = 2;
+            const barX = this.x - barWidth / 2;
+            const barY = this.y - 8;
+            ctx.fillStyle = `rgb(255, 0, 0)`;
+            ctx.fillRect(barX, barY, barWidth * ratio, barHeight);
+        }
+    }
 }

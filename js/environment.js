@@ -1,4 +1,4 @@
-class Environment {
+export default class Environment {
     constructor(config = {}) {
         this.width = config.width || 800;
         this.height = config.height || 600;
@@ -51,42 +51,59 @@ class Environment {
         // decay pheromone map
         for (let x = 0; x < this.mapWidth; x++) {
             for (let y = 0; y < this.mapHeight; y++) {
-                this.pheromoneMap[x][y] = Math.max(0, this.pheromoneMap[x][y] - this.pheromoneDecayRate);
+                if (this.pheromoneMap[x][y] > 0) {
+                    this.pheromoneMap[x][y] = Math.max(0, this.pheromoneMap[x][y] - this.pheromoneDecayRate);
+                }
             }
         }
     }
 
     draw(ctx) {
-        ctx.fillStyle = '#fafafa';
+        // Clear with a nice dark background handled by CSS/Main, but here we draw game elements
+        // Actually, let's make the background transparent so CSS handles the color, or draw a specific color
+        // The original drew #fafafa. Let's stick to drawing nothing for bg if we want CSS to handle it, 
+        // or draw a dark bg. Let's draw a dark bg for the "premium" feel.
+        ctx.fillStyle = '#1a1a1a';
         ctx.fillRect(0, 0, this.width, this.height);
 
         // nest
-        ctx.fillStyle = '#bbb';
+        ctx.fillStyle = '#4a90e2'; // Blueish nest
         ctx.beginPath();
         ctx.arc(this.nest.x, this.nest.y, 10, 0, Math.PI * 2);
         ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
         // obstacles
-        ctx.fillStyle = '#888';
-        this.obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+        ctx.fillStyle = '#333';
+        ctx.strokeStyle = '#555';
+        this.obstacles.forEach(o => {
+            ctx.fillRect(o.x, o.y, o.w, o.h);
+            ctx.strokeRect(o.x, o.y, o.w, o.h);
+        });
 
         // pheromone map
         for (let x = 0; x < this.mapWidth; x++) {
             for (let y = 0; y < this.mapHeight; y++) {
                 const val = this.pheromoneMap[x][y];
-                if (val > 0) {
-                    ctx.fillStyle = `rgba(255,0,0,${val})`;
+                if (val > 0.05) { // Threshold to avoid drawing invisible
+                    ctx.fillStyle = `rgba(64, 224, 208, ${val * 0.5})`; // Turquoise pheromones
                     ctx.fillRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize);
                 }
             }
         }
 
-        ctx.fillStyle = 'green';
+        // food
+        ctx.fillStyle = '#e74c3c'; // Red food
         this.food.forEach(f => {
             ctx.beginPath();
-            ctx.arc(f.x, f.y, 3, 0, Math.PI * 2);
+            ctx.arc(f.x, f.y, 4, 0, Math.PI * 2);
             ctx.fill();
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = '#e74c3c';
         });
+        ctx.shadowBlur = 0;
     }
 
     deposit(x, y, strength = 1) {
@@ -96,8 +113,4 @@ class Environment {
             this.pheromoneMap[cx][cy] = Math.min(1, this.pheromoneMap[cx][cy] + strength);
         }
     }
-}
-
-if (typeof module !== 'undefined') {
-    module.exports = Environment;
 }

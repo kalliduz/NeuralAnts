@@ -2,8 +2,8 @@
 
 This project is a browser-based simulation of ants that use small neural
 networks as their brains. The aim is to create a playground for evolving
-agents and a dynamic environment. The code is intentionally lightweight and
-runs without any build step; simply open `main.html` in a browser.
+agents and a dynamic environment. The code uses modern ES Modules and requires
+a local web server to run.
 
 ## Components
 
@@ -64,9 +64,9 @@ added to this configuration so they remain user controllable.
 
 ## Running
 
-Open `main.html` in any modern browser. No server is required. For local
-experiments, you can also run `python -m http.server` and navigate to the
-served page.
+## Running
+ 
+You need to serve the files using a local web server (e.g., `npx serve .` or `python -m http.server`) to avoid CORS issues with ES Modules. Open the served URL in your browser.
 
 ## Testing
 
